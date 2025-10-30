@@ -672,16 +672,16 @@
 //         method,
 //       });
 //       await attendance.save();
-//       console.log(`✅ تم تسجيل حضور ${employee.name} الساعة ${currentTime}`);
+//       console.log(` تم تسجيل حضور ${employee.name} الساعة ${currentTime}`);
 //     } else if (!attendance.time_out) {
 //       attendance.time_out = currentTime;
 //       await attendance.save();
-//       console.log(`👋 تم تسجيل انصراف ${employee.name} الساعة ${currentTime}`);
+//       console.log(`تم تسجيل انصراف ${employee.name} الساعة ${currentTime}`);
 //     } else {
-//       console.log(`⚠️ ${employee.name} أنهى يومه بالفعل`);
+//       console.log(` ${employee.name} أنهى يومه بالفعل`);
 //     }
 //   } catch (err) {
-//     console.log("❌ خطأ أثناء تسجيل الحضور/الانصراف:", err.message);
+//     console.log(" خطأ أثناء تسجيل الحضور/الانصراف:", err.message);
 //   }
 // }
 
@@ -691,13 +691,13 @@
 //   try {
 //     const { qr_code } = req.body;
 //     if (!qr_code) {
-//       return res.status(400).json({ message: "QR code مفقود ❌" });
+//       return res.status(400).json({ message: "QR code مفقود " });
 //     }
 //     await recordAttendance(qr_code, "QR");
-//     res.json({ message: "تم تسجيل الحضور أو الانصراف بنجاح ✅" });
+//     res.json({ message: "تم تسجيل الحضور أو الانصراف بنجاح " });
 //   } catch (error) {
 //     console.error(error);
-//     res.status(500).json({ message: "حدث خطأ أثناء التسجيل ❌" });
+//     res.status(500).json({ message: "حدث خطأ أثناء التسجيل " });
 //   }
 // });
 
@@ -750,7 +750,7 @@
 //     `;
 //     res.send(html);
 //   } catch (err) {
-//     res.status(500).send("حدث خطأ أثناء تحميل الصفحة ❌");
+//     res.status(500).send("حدث خطأ أثناء تحميل الصفحة ");
 //   }
 // });
 
@@ -763,19 +763,22 @@
 // // 🧾 لما يتم عمل Scan
 // app.get("/api/scan", async (req, res) => {
 //   const { qr_code } = req.query;
-//   if (!qr_code) return res.send("QR code مفقود ❌");
+//   if (!qr_code) return res.send("QR code مفقود ");
 //   await recordAttendance(qr_code, "QR");
-//   res.send("✅ تم تسجيل الحضور أو الانصراف بنجاح!");
+//   res.send(" تم تسجيل الحضور أو الانصراف بنجاح!");
 // });
 
 // app.listen(port, () => {
 //   console.log(`Example app listening on port ${port}`);
-// });
+// // });
 // ////////////////////////////////////////////////////////
 import mongoose from "mongoose";
 import express from "express";
 import moment from "moment";
 import QRCode from "qrcode";
+
+
+
 
 const port = process.env.PORT || 3000; // 
 
@@ -784,7 +787,8 @@ const app = express();
 app.use(express.json());
 
 // الاتصال بقاعدة البيانات //
-mongoose.connect("mongodb://localhost:27017/project")
+mongoose.connect("mongodb://mongo:zLDVgczekhTNwayrUTVIVxAGyttGxKmQ@gondola.proxy.rlwy.net:11597")
+
   .then(() => console.log(" Connected to MongoDB"))
   .catch((err) => console.log("Connection Error:", err));
 
@@ -830,13 +834,13 @@ async function insertEmployees() {
     ];
 
     await Employee.insertMany(employees);
-    console.log("✅ تم إدخال الموظفين بنجاح");
+    console.log(" تم إدخال الموظفين بنجاح");
   } catch (error) {
     console.log("البيانات موجودة بالفعل أو حدث خطأ أثناء الإدخال");
   }
 }
 //  شغليها مرة واحدة فقط
-// insertEmployees();
+insertEmployees();
 
 
 // تسجيل الحضور أو الانصراف
@@ -859,16 +863,16 @@ async function recordAttendance(qr_code, method = "QR") {
         method,
       });
       await attendance.save();
-      console.log(`✅ تم تسجيل حضور ${employee.name} الساعة ${currentTime}`);
+      console.log(`تم تسجيل حضور ${employee.name} الساعة ${currentTime}`);
     } else if (!attendance.time_out) {
       attendance.time_out = currentTime;
       await attendance.save();
-      console.log(`👋 تم تسجيل انصراف ${employee.name} الساعة ${currentTime}`);
+      console.log(` تم تسجيل انصراف ${employee.name} الساعة ${currentTime}`);
     } else {
-      console.log(`⚠️ ${employee.name} أنهى يومه بالفعل`);
+      console.log(` ${employee.name} أنهى يومه بالفعل`);
     }
   } catch (err) {
-    console.log("❌ خطأ أثناء تسجيل الحضور/الانصراف:", err.message);
+    console.log("خطأ أثناء تسجيل الحضور/الانصراف:", err.message);
   }
 }
 
@@ -878,19 +882,19 @@ app.post("/api/scan", async (req, res) => {
   try {
     const { qr_code } = req.body;
     if (!qr_code) {
-      return res.status(400).json({ message: "QR code مفقود ❌" });
+      return res.status(400).json({ message: "QR code مفقود " });
     }
     await recordAttendance(qr_code, "QR");
-    res.json({ message: "تم تسجيل الحضور أو الانصراف بنجاح ✅" });
+    res.json({ message: "تم تسجيل الحضور أو الانصراف بنجاح " });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "حدث خطأ أثناء التسجيل ❌" });
+    res.status(500).json({ message: "حدث خطأ أثناء التسجيل " });
   }
 });
 
 
 // لكل موظف QR فيها  HTML عرض صفحة //
-const publicUrl = "http://192.168.100.30:3000";
+const publicUrl = "https://attendance-system-production-7a06.up.railway.app/employees";
 
 app.get("/employees", async (req, res) => {
   try {
@@ -898,7 +902,8 @@ app.get("/employees", async (req, res) => {
 
     const employeeQRs = await Promise.all(
       employees.map(async (emp) => {
-       const qrLink = `http://192.168.100.30:3000/api/scan?qr_code=${emp.qr_code}`;
+       const qrLink = `https://attendance-system-production-7a06.up.railway.app/api/scan?qr_code=${emp.qr_code}`;
+
 
 
        
@@ -957,16 +962,15 @@ app.get("/api/scan", async (req, res) => {
   const { qr_code } = req.query;
   if (!qr_code) return res.send("QR code مفقود ");
   await recordAttendance(qr_code, "QR");
-  res.send("✅ تم تسجيل الحضور أو الانصراف بنجاح!");
+  res.send(" تم تسجيل الحضور أو الانصراف بنجاح!");
 });
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-app.listen(3000, "0.0.0.0", () => {
-  console.log("Server running on http://192.168.100.30:3000");
+app.listen(port, "0.0.0.0", () => {
+  console.log("Server running on  port ${port}");
 });
-
 
 
 
