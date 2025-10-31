@@ -902,8 +902,7 @@ app.get("/employees", async (req, res) => {
 
     const employeeQRs = await Promise.all(
       employees.map(async (emp) => {
-       const qrLink = `https://attendance-system-production-9d3c.up.railway.app/employees.app/api/scan?qr_code=${emp.qr_code}`;
-
+      const qrLink = `https://attendance-system-production-9d3c.up.railway.app/api/scan?qr_code=${emp.qr_code}`;
 
 
        
