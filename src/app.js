@@ -787,7 +787,7 @@ const app = express();
 app.use(express.json());
 
 // الاتصال بقاعدة البيانات //
-mongoose.connect("mongodb://mongo:zLDVgczekhTNwayrUTVIVxAGyttGxKmQ@gondola.proxy.rlwy.net:11597")
+mongoose.connect("mongodb://mongo:srgvGqEgpjKJoQKowTJIjhRScfvaPSEV@trolley.proxy.rlwy.net:44787")
 
   .then(() => console.log(" Connected to MongoDB"))
   .catch((err) => console.log("Connection Error:", err));
@@ -894,7 +894,7 @@ app.post("/api/scan", async (req, res) => {
 
 
 // لكل موظف QR فيها  HTML عرض صفحة //
-const publicUrl = "https://attendance-system-production-7a06.up.railway.app/employees";
+const publicUrl = "https://attendance-system-production-9d3c.up.railway.app/employees";
 
 app.get("/employees", async (req, res) => {
   try {
@@ -902,7 +902,7 @@ app.get("/employees", async (req, res) => {
 
     const employeeQRs = await Promise.all(
       employees.map(async (emp) => {
-       const qrLink = `https://attendance-system-production-7a06.up.railway.app/api/scan?qr_code=${emp.qr_code}`;
+       const qrLink = `https://attendance-system-production-9d3c.up.railway.app/employees.app/api/scan?qr_code=${emp.qr_code}`;
 
 
 
@@ -958,22 +958,29 @@ app.get("/", (req, res) => {
 });
 
 // // scan لما اعمل //
-app.get("/api/scan", async (req, res) => {
-  const { qr_code } = req.query;
-  if (!qr_code) return res.send("QR code مفقود ❌");
+app.get('/api/scan', async (req, res) => {
+  try {
+    const employeeId = req.query.employeeId;
 
-  await recordAttendance(qr_code, "QR");
+    if (!employeeId) {
+      return res.send(`
+        <h2>❌ لم يتم العثور على رقم الموظف</h2>
+        <p>يرجى التأكد من الرابط</p>
+      `);
+    }
 
-  res.send(`
-    <html>
-      <head><meta charset="UTF-8"><title>تم التسجيل</title></head>
-      <body style="font-family:Arial; text-align:center; margin-top:100px;">
-        <h2>✅ تم تسجيل الحضور أو الانصراف بنجاح!</h2>
-        <a href="/employees">🔙 العودة إلى صفحة الموظفين</a>
-      </body>
-    </html>
-  `);
+    // هنا الكود اللي بيسجل الحضور أو الانصراف
+    // ...
+
+    res.send(`
+      <h2>✅ تم تسجيل الحضور بنجاح!</h2>
+      <p>شكراً لاستخدامك النظام.</p>
+    `);
+  } catch (error) {
+    res.send(`<h2>❌ حدث خطأ أثناء معالجة الطلب</h2><pre>${error.message}</pre>`);
+  }
 });
+
 
 
 
