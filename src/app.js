@@ -878,23 +878,19 @@ async function recordAttendance(qr_code, method = "QR") {
 
 
 // API بيستقبل الكود من صفحة HTML بعد عمل Scan
-app.get("/api/scan", async (req, res) => {
-  const { qr_code } = req.query;
-  if (!qr_code) return res.send("QR code مفقود ❌");
-
-  await recordAttendance(qr_code, "QR");
-
-  res.send(`
-    <html>
-      <head><meta charset="UTF-8"><title>تم التسجيل</title></head>
-      <body style="font-family:Arial; text-align:center; margin-top:100px;">
-        <h2>✅ تم تسجيل الحضور أو الانصراف بنجاح!</h2>
-        <a href="/employees">🔙 العودة إلى صفحة الموظفين</a>
-      </body>
-    </html>
-  `);
+app.post("/api/scan", async (req, res) => {
+  try {
+    const { qr_code } = req.body;
+    if (!qr_code) {
+      return res.status(400).json({ message: "QR code مفقود " });
+    }
+    await recordAttendance(qr_code, "QR");
+    res.json({ message: "تم تسجيل الحضور أو الانصراف بنجاح " });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "حدث خطأ أثناء التسجيل " });
+  }
 });
-
 
 
 // لكل موظف QR فيها  HTML عرض صفحة //
@@ -964,10 +960,21 @@ app.get("/", (req, res) => {
 // // scan لما اعمل //
 app.get("/api/scan", async (req, res) => {
   const { qr_code } = req.query;
-  if (!qr_code) return res.send("QR code مفقود ");
+  if (!qr_code) return res.send("QR code مفقود ❌");
+
   await recordAttendance(qr_code, "QR");
-  res.send(" تم تسجيل الحضور أو الانصراف بنجاح!");
+
+  res.send(`
+    <html>
+      <head><meta charset="UTF-8"><title>تم التسجيل</title></head>
+      <body style="font-family:Arial; text-align:center; margin-top:100px;">
+        <h2>✅ تم تسجيل الحضور أو الانصراف بنجاح!</h2>
+        <a href="/employees">🔙 العودة إلى صفحة الموظفين</a>
+      </body>
+    </html>
+  `);
 });
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
