@@ -894,7 +894,7 @@ app.post("/api/scan", async (req, res) => {
 
 
 // لكل موظف QR فيها  HTML عرض صفحة //
-const publicUrl = "https://attendance-system-production-9d3c.up.railway.app/employees";
+const publicUrl = "https://attendance-system-production-b952.up.railway.app/employees";
 
 app.get("/employees", async (req, res) => {
   try {
@@ -902,7 +902,7 @@ app.get("/employees", async (req, res) => {
 
     const employeeQRs = await Promise.all(
       employees.map(async (emp) => {
-      const qrLink = `https://attendance-system-production-9d3c.up.railway.app/api/scan?qr_code=${emp.qr_code}`;
+      const qrLink = `https://attendance-system-production-b952.up.railway.app/api/scan?qr_code=${emp.qr_code}`;
 
 
        
