@@ -953,33 +953,23 @@ app.get("/employees", async (req, res) => {
 
 
 // الصفحة الرئيسية
-app.get("/", (req, res) => {
-  res.redirect("/employees");
+app.get("/api/scan", async (req, res) => {
+  const { qr_code } = req.query;
+  if (!qr_code) return res.send("QR code مفقود ❌");
+
+  await recordAttendance(qr_code, "QR");
+
+  res.send(`
+    <html>
+      <head><meta charset="UTF-8"><title>تم التسجيل</title></head>
+      <body style="font-family:Arial; text-align:center; margin-top:100px;">
+        <h2>✅ تم تسجيل الحضور أو الانصراف بنجاح!</h2>
+        <a href="/employees">🔙 العودة إلى صفحة الموظفين</a>
+      </body>
+    </html>
+  `);
 });
 
-// // scan لما اعمل //
-app.get('/api/scan', async (req, res) => {
-  try {
-    const employeeId = req.query.employeeId;
-
-    if (!employeeId) {
-      return res.send(`
-        <h2>❌ لم يتم العثور على رقم الموظف</h2>
-        <p>يرجى التأكد من الرابط</p>
-      `);
-    }
-
-    // هنا الكود اللي بيسجل الحضور أو الانصراف
-    // ...
-
-    res.send(`
-      <h2>✅ تم تسجيل الحضور بنجاح!</h2>
-      <p>شكراً لاستخدامك النظام.</p>
-    `);
-  } catch (error) {
-    res.send(`<h2>❌ حدث خطأ أثناء معالجة الطلب</h2><pre>${error.message}</pre>`);
-  }
-});
 
 
 
