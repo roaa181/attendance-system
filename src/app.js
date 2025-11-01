@@ -787,7 +787,9 @@ const app = express();
 app.use(express.json());
 
 // الاتصال بقاعدة البيانات //
-mongoose.connect("mongodb://mongo:srgvGqEgpjKJoQKowTJIjhRScfvaPSEV@trolley.proxy.rlwy.net:44787")
+mongoose.connect("mongodb://mongo:srgvGqEgpjKJoQKowTJIjhRScfvaPSEV@trolley.proxy.rlwy.net:44787/attendance")
+
+// mongoose.connect("mongodb+srv://roaasamir181_db_user:<roaasamir181_db_user>@cluster0.tcma3du.mongodb.net/?appName=Cluster0")
 
   .then(() => console.log(" Connected to MongoDB"))
   .catch((err) => console.log("Connection Error:", err));
@@ -976,7 +978,7 @@ app.get("/api/scan", async (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 app.listen(port, "0.0.0.0", () => {
-  console.log("Server running on  port ${port}");
+  console.log('Server running on  port ${port}');
 });
 
 
