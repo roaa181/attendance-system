@@ -787,7 +787,7 @@ const app = express();
 app.use(express.json());
 
 // الاتصال بقاعدة البيانات //
-mongoose.connect("mongodb://mongo:srgvGqEgpjKJoQKowTJIjhRScfvaPSEV@trolley.proxy.rlwy.net:44787/attendance")
+mongoose.connect("mongodb://mongo:srgvGqEgpjKJoQKowTJIjhRScfvaPSEV@mongodb.railway.internal:27017")
 
 // mongoose.connect("mongodb+srv://roaasamir181_db_user:<roaasamir181_db_user>@cluster0.tcma3du.mongodb.net/?appName=Cluster0")
 
