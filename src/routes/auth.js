@@ -1,0 +1,46 @@
+import express from "express";
+import Employee from "../models/Employee.js";
+import jwt from "jsonwebtoken";
+
+const router = express.Router();
+const JWT_SECRET = "secret123";
+
+// Sign Up
+router.post("/signup", async (req, res) => {
+  const { name, age, email, password, role } = req.body;
+
+  try {
+    const existingUser = await Employee.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: "Email already exists" });
+
+    const employee = await Employee.create({ name, age, email, password, role });
+    const token = jwt.sign({ id: employee._id, role: employee.role }, JWT_SECRET, { expiresIn: "1d" });
+
+    res.json({ message: "User created", token, employee });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Login
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const employee = await Employee.findOne({ email });
+    if (!employee) return res.status(400).json({ message: "Invalid email or password" });
+
+    const isMatch = await employee.comparePassword(password);
+    if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
+
+    const token = jwt.sign({ id: employee._id, role: employee.role }, JWT_SECRET, { expiresIn: "1d" });
+
+    res.json({ message: "Login successful", token, employee });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+export default router;
